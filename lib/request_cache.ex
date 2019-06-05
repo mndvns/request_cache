@@ -91,6 +91,10 @@ defmodule RequestCache do
     state_get_struct(mod, id)
   end
 
+  defp state_get_struct(mod, list) when is_list(list) do
+    Enum.map(list, &state_get_struct(mod, &1))
+  end
+
   defp state_get_struct(mod, id) do
     case state_get({mod, id}) do
       %{__struct__: _} = val -> val

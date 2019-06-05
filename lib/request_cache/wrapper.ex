@@ -18,7 +18,7 @@ defmodule RequestCache.Wrapper do
 
       def start_link(gen_server_options \\ []) do
         [
-          global_ttl: 1_000,
+          global_ttl: 3_000,
           ttl_check_interval: 250,
           ets_options: [read_concurrency: true]
         ]
