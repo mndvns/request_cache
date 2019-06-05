@@ -42,16 +42,20 @@ defmodule RequestCache do
   end
 
   def find(mod, args) do
-    handle = fn mod, args, _key -> struct(mod, args) end
-    find(mod, args, handle)
+    find(mod, args, nil)
   end
 
-  def find(mod, args, handle) do
-    key_parts = {mod, args}
+  def find(mod, args, ident) do
+    handle = fn {mod, args, _ident, _key} -> struct(mod, args) end
+    find(mod, args, ident, handle)
+  end
+
+  def find(mod, args, ident, handle) do
+    key_parts = {mod, args, ident}
     key = state_encode_key(key_parts)
 
     case state_has_key?(key) do
-      false -> handle.(mod, args, key)
+      false -> handle.({mod, args, ident, key})
       true -> state_get(key)
     end
     |> (&state_get_struct(mod, &1)).()
@@ -131,6 +135,6 @@ defmodule RequestCache do
   end
 
   def state_uuid() do
-    Process.get(:request_cache_id, UUID.uuid4())
+    Process.get(:request_cache_id, UUID.uuid3(:oid, inspect(self)))
   end
 end
