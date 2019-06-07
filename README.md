@@ -12,7 +12,7 @@ plug(RequestCache.Plug)
 ```
 
 You can use it without plug. It will key off of the main
-process pid instead off of a request.
+process pid instead of off a request.
 
 ## Installation
 
