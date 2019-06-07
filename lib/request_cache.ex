@@ -23,7 +23,7 @@ defmodule RequestCache do
     |> ConCache.start_link()
   end
 
-  def get(key) when is_tuple(key) do
+  def get(key) do
     super({request_uuid(), key})
   end
 
